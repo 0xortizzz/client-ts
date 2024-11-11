@@ -2,11 +2,11 @@ import Client, {
   HTTPTransport,
   RequestManager,
   WebSocketTransport,
-} from '@open-rpc/client-js';
-import assert from 'node:assert';
-import { randomInt } from 'node:crypto';
-import { type Address, type Hash, type LocalAccount, parseEther } from 'viem';
-import type { SmartAccount } from 'viem/account-abstraction';
+} from "@open-rpc/client-js";
+import assert from "node:assert";
+import { randomInt } from "node:crypto";
+import { type Address, type Hash, type LocalAccount, parseEther } from "viem";
+import type { SmartAccount } from "viem/account-abstraction";
 import {
   buildAccountId,
   type NumericString,
@@ -17,14 +17,13 @@ import {
   type OrderStatus,
   DEFAULT_ORDER_FLAG,
   EIP712_DOMAIN,
-} from '@foundation-network/core';
+} from "@foundation-network/core";
 
 type Account = LocalAccount | SmartAccount;
 
-export const TESTNET_RPC_URL =
-  'https://testnet-rpc.foundation.network/spot';
+export const TESTNET_RPC_URL = "https://testnet-rpc.foundation.network/spot";
 
-export const TESTNET_API_URL = 'https://testnet-api.foundation.network';
+export const TESTNET_API_URL = "https://testnet-api.foundation.network";
 
 type ClientOptions = {
   rpcUrl: string;
@@ -53,7 +52,7 @@ export class FoundationSpotClient {
       options_,
     );
 
-    const transport = options.rpcUrl.startsWith('ws')
+    const transport = options.rpcUrl.startsWith("ws")
       ? new WebSocketTransport(options.rpcUrl)
       : new HTTPTransport(options.rpcUrl);
     this.rpcClient = new Client(new RequestManager([transport]));
@@ -69,7 +68,7 @@ export class FoundationSpotClient {
 
   async getAccountInfo() {
     return await this.rpcClient.request({
-      method: 'account_get_account',
+      method: "account_get_account",
       params: [this.subaccount],
     });
   }
@@ -87,12 +86,12 @@ export class FoundationSpotClient {
     const quoteAsset = assets.find((t) => t.ticker === quote);
     const config = await this.getSigningConfig();
 
-    assert(baseAsset && quoteAsset, 'Unknown assets');
+    assert(baseAsset && quoteAsset, "Unknown assets");
 
     const nonce =
       (BigInt(Date.now() + 20_000) << 20n) | BigInt(randomInt(1000, 30000));
     const flag: OrderFlag =
-      typeof flag_ === 'undefined'
+      typeof flag_ === "undefined"
         ? DEFAULT_ORDER_FLAG
         : Object.assign({}, DEFAULT_ORDER_FLAG, flag_);
     const exp = encodeFlag(flag);
@@ -105,21 +104,21 @@ export class FoundationSpotClient {
         quote: BigInt(quoteAsset.asset_id),
         nonce: nonce,
         priceX18: parseEther(price),
-        amount: side === 'bid' ? parseEther(amount) : -parseEther(amount),
+        amount: side === "bid" ? parseEther(amount) : -parseEther(amount),
         expiration: exp,
         triggerCondition: 0n,
       },
-      primaryType: 'Order',
+      primaryType: "Order",
       types: {
         Order: [
-          { type: 'bytes32', name: 'accountId' },
-          { type: 'uint64', name: 'base' },
-          { type: 'uint64', name: 'quote' },
-          { type: 'int128', name: 'priceX18' },
-          { type: 'int128', name: 'amount' },
-          { type: 'uint64', name: 'expiration' },
-          { type: 'uint64', name: 'nonce' },
-          { type: 'uint128', name: 'triggerCondition' },
+          { type: "bytes32", name: "accountId" },
+          { type: "uint64", name: "base" },
+          { type: "uint64", name: "quote" },
+          { type: "int128", name: "priceX18" },
+          { type: "int128", name: "amount" },
+          { type: "uint64", name: "expiration" },
+          { type: "uint64", name: "nonce" },
+          { type: "uint128", name: "triggerCondition" },
         ],
       },
     } as const;
@@ -127,7 +126,7 @@ export class FoundationSpotClient {
     const signature = await this.signer.signTypedData(signData);
 
     const params = {
-      method: 'ob_place_limit',
+      method: "ob_place_limit",
       params: [
         {
           account_id: this.subaccount,
@@ -163,7 +162,7 @@ export class FoundationSpotClient {
   private async getSigningConfig() {
     if (!this.config) {
       this.config = (await this.rpcClient.request({
-        method: 'core_get_config',
+        method: "core_get_config",
       })) as SigningConfig;
     }
 
@@ -214,7 +213,7 @@ export type PendingOrder = {
   signer: Address | null;
   hash: Hash;
   has_dependency: boolean;
-  tag: 'limit' | 'market' | 'stop_loss' | 'take_profit';
+  tag: "limit" | "market" | "stop_loss" | "take_profit";
 };
 
 export type Position = {

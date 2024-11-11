@@ -1,4 +1,4 @@
-import type { Address, Hash } from 'viem';
+import type { Address, Hash } from "viem";
 
 export enum ProductType {
   Unknown = 0,
@@ -12,35 +12,35 @@ export const buildAccountId = (
   brokerId: number,
   subaccountIndex: number,
 ): Hash => {
-  return `${address}${`${brokerId}`.padStart(8, '0')}0000${`${productType}`.padStart(8, '0')}${`${subaccountIndex}`.padStart(4, '0')}`;
+  return `${address}${`${brokerId}`.padStart(8, "0")}0000${`${productType}`.padStart(8, "0")}${`${subaccountIndex}`.padStart(4, "0")}`;
 };
 
-export type Side = 'ask' | 'bid';
+export type Side = "ask" | "bid";
 
-const TIME_IN_FORCES = [
-  'default',
-  'immediate_or_cancel',
-  'fill_or_kill',
-  'post_only',
+export const TIME_IN_FORCES = [
+  "default",
+  "immediate_or_cancel",
+  "fill_or_kill",
+  "post_only",
 ] as const;
 
-const SELF_TRADE_BEHAVIORS = [
+export const SELF_TRADE_BEHAVIORS = [
   // cancel the maker order and continue to fill taker
-  'cancel_provide',
+  "cancel_provide",
   // cancel the remaining of the taker, stop filling
-  'decrease_take',
+  "decrease_take",
   // abort the fill process, revert all filled and force cancel the maker order
-  'expire_both',
+  "expire_both",
   // allow self trade
-  'fill',
+  "fill",
 ] as const;
 
 export type TimeInForce = (typeof TIME_IN_FORCES)[number];
-export type SeltTradeBehavior = (typeof SELF_TRADE_BEHAVIORS)[number];
+export type SelfTradeBehavior = (typeof SELF_TRADE_BEHAVIORS)[number];
 
 export type OrderFlag = {
   timeInForce: TimeInForce;
-  selfTradeBehavior: SeltTradeBehavior;
+  selfTradeBehavior: SelfTradeBehavior;
   reduceOnly: boolean;
   expiresAt: number | undefined | null;
   isMarketOrder: boolean;
@@ -49,9 +49,9 @@ export type OrderFlag = {
 export const DEFAULT_ORDER_FLAG: OrderFlag = {
   expiresAt: undefined,
   reduceOnly: false,
-  timeInForce: 'default',
+  timeInForce: "default",
   isMarketOrder: false,
-  selfTradeBehavior: 'cancel_provide',
+  selfTradeBehavior: "cancel_provide",
 };
 
 export const encodeFlag = (flag: OrderFlag) => {
@@ -69,16 +69,18 @@ export const encodeFlag = (flag: OrderFlag) => {
 };
 
 export const EIP712_DOMAIN = {
-  name: 'FOUNDATION',
+  name: "FOUNDATION",
   chainId: 1,
-  version: '0.1.0',
+  version: "0.1.0",
 } as const;
 
 export type NumericString = `${number}`;
 
 export type OrderStatus =
-  | 'placed'
-  | 'filled'
-  | 'partial_filled'
-  | 'canceled'
-  | 'conditional_canceled';
+  | "placed"
+  | "filled"
+  | "partial_filled"
+  | "canceled"
+  | "conditional_canceled";
+
+export const DECIMALS: number = 8;
