@@ -17,7 +17,7 @@ import {
 } from './types';
 import { type Address, Hash, type LocalAccount, parseUnits } from 'viem';
 import type { SmartAccount } from 'viem/account-abstraction';
-import { encodeExpiration } from './utils';
+import {encodeExpiration, encodeTriggerCondition} from './utils';
 import { DECIMALS } from '@foundation-network/core/src';
 
 export const EIP712_DOMAIN = {
@@ -185,7 +185,7 @@ export class FoundationPerpEngine {
         ),
         nonce: BigInt(params.nonce),
         expiration: encodeExpiration(params),
-        triggerCondition: 0n,
+        triggerCondition: encodeTriggerCondition(params),
       },
     });
   }

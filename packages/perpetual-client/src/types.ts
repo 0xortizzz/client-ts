@@ -1,6 +1,6 @@
 import { Address, Hash } from 'viem';
 import { OrderStatus, Side, TimeInForce } from '@foundation-network/core';
-import { SelfTradeBehavior } from '@foundation-network/core/src';
+import {SelfTradeBehavior, TriggerCondition} from '@foundation-network/core/src';
 
 export type AddressConfig = {
   endpoint: Address;
@@ -31,6 +31,7 @@ export type ClientPlaceOrder = {
   nonce?: string;
   expiresAt?: number;
   verifyingAddr?: Address;
+  triggerCondition?: TriggerCondition;
 };
 
 export type EnginePlaceOrder = {
@@ -45,6 +46,7 @@ export type EnginePlaceOrder = {
   self_trade_behavior: SelfTradeBehavior;
   nonce: string;
   expires_at?: number;
+  trigger_condition?: TriggerCondition;
 };
 
 export type ClientCancelOrder = {
@@ -101,6 +103,7 @@ export type ClientOpenOrder = {
   isTriggered: boolean;
   hasDependency: boolean;
   tag: OrderTag;
+  triggerCondition?: TriggerCondition;
 };
 
 export type EngineOpenOrder = {
@@ -125,6 +128,7 @@ export type EngineOpenOrder = {
   system_fee_tier: FeeTier;
   broker_fee_tier: FeeTier;
   tag: OrderTag;
+  trigger_condition?: TriggerCondition;
 };
 
 export type ClientMarketConfig = {
