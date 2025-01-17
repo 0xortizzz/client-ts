@@ -1,6 +1,6 @@
-import { Address, Hash } from "viem";
-import { OrderStatus, Side, TimeInForce } from "@foundation-network/core";
-import { SelfTradeBehavior } from "@foundation-network/core/src";
+import { Address, Hash } from 'viem';
+import { OrderStatus, Side, TimeInForce } from '@foundation-network/core';
+import { SelfTradeBehavior } from '@foundation-network/core/src';
 
 export type AddressConfig = {
   endpoint: Address;
@@ -68,14 +68,14 @@ export type AddTradingKey = {
   nonce: number;
 };
 
-export type OrderTag = "limit" | "market" | "stop_loss" | "take_profit";
+export type OrderTag = 'limit' | 'market' | 'stop_loss' | 'take_profit';
 
 export type OrderSource =
-  | "Trade"
-  | "Liquidate"
-  | "InsuranceFundCover"
-  | "Deleverage"
-  | "Delist";
+  | 'Trade'
+  | 'Liquidate'
+  | 'InsuranceFundCover'
+  | 'Deleverage'
+  | 'Delist';
 
 export type OrderExpiration = {
   time_in_force: TimeInForce;

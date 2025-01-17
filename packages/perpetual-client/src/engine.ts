@@ -2,7 +2,7 @@ import Client, {
   HTTPTransport,
   RequestManager,
   WebSocketTransport,
-} from "@open-rpc/client-js";
+} from '@open-rpc/client-js';
 import {
   Config,
   EngineCancelOrder,
@@ -14,26 +14,26 @@ import {
   EngineMarketPrice,
   EngineAccount,
   AddTradingKey,
-} from "./types";
-import { type Address, Hash, type LocalAccount, parseUnits } from "viem";
-import type { SmartAccount } from "viem/account-abstraction";
-import { encodeExpiration } from "./utils";
-import { DECIMALS } from "@foundation-network/core/src";
+} from './types';
+import { type Address, Hash, type LocalAccount, parseUnits } from 'viem';
+import type { SmartAccount } from 'viem/account-abstraction';
+import { encodeExpiration } from './utils';
+import { DECIMALS } from '@foundation-network/core/src';
 
 export const EIP712_DOMAIN = {
-  name: "FOUNDATION",
+  name: 'FOUNDATION',
   chainId: 1,
-  version: "0.1.0",
+  version: '0.1.0',
 } as const;
 export const TESTNET_RPC_URL =
-  "https://testnet-rpc.foundation.network/perpetual";
+  'https://testnet-rpc.foundation.network/perpetual';
 
 export class FoundationPerpEngine {
   private client: Client;
   private config: Config | undefined;
 
   constructor(rpc: string) {
-    const transport = rpc.startsWith("ws")
+    const transport = rpc.startsWith('ws')
       ? new WebSocketTransport(rpc)
       : new HTTPTransport(rpc);
 
@@ -42,14 +42,14 @@ export class FoundationPerpEngine {
 
   async getUserNonce(address: Address): Promise<number> {
     return this.client.request({
-      method: "core_get_user_nonce",
+      method: 'core_get_user_nonce',
       params: [address],
     });
   }
 
   async addTradingKey(params: AddTradingKey, signature: Hash): Promise<void> {
     await this.client.request({
-      method: "ob_add_trading_key",
+      method: 'ob_add_trading_key',
       params: [
         {
           account_id: params.accountId,
@@ -63,14 +63,14 @@ export class FoundationPerpEngine {
 
   async getTradingKey(accountId: Hash): Promise<Address | null> {
     return this.client.request({
-      method: "ob_get_trading_key",
+      method: 'ob_get_trading_key',
       params: [accountId],
     });
   }
 
   async placeOrder(params: EnginePlaceOrder, signature: Hash): Promise<number> {
     return this.client.request({
-      method: "ob_place_limit",
+      method: 'ob_place_limit',
       params: [params, signature],
     });
   }
@@ -80,7 +80,7 @@ export class FoundationPerpEngine {
     signature: Hash,
   ): Promise<number> {
     return this.client.request({
-      method: "ob_cancel",
+      method: 'ob_cancel',
       params: [params, signature],
     });
   }
@@ -90,7 +90,7 @@ export class FoundationPerpEngine {
     orderId: number,
   ): Promise<EngineOpenOrder | null> {
     return this.client.request({
-      method: "ob_query_order",
+      method: 'ob_query_order',
       params: [marketId, orderId],
     });
   }
@@ -100,35 +100,35 @@ export class FoundationPerpEngine {
     accountId: Hash,
   ): Promise<EngineOpenOrder[]> {
     return this.client.request({
-      method: "ob_query_user_orders",
+      method: 'ob_query_user_orders',
       params: [marketId, accountId],
     });
   }
 
   async getAccount(accountId: Hash): Promise<EngineAccount> {
     return this.client.request({
-      method: "core_query_account",
+      method: 'core_query_account',
       params: [accountId],
     });
   }
 
   async getMarketConfigs(): Promise<EngineMarketConfig[]> {
     return this.client.request({
-      method: "ob_query_open_markets",
+      method: 'ob_query_open_markets',
       params: [],
     });
   }
 
   async getMarketStates(): Promise<EngineMarketState[]> {
     return this.client.request({
-      method: "ob_query_markets_state",
+      method: 'ob_query_markets_state',
       params: [],
     });
   }
 
   async getMarketPrice(marketId: number): Promise<EngineMarketPrice> {
     return this.client.request({
-      method: "core_query_price",
+      method: 'core_query_price',
       params: [marketId],
     });
   }
@@ -138,14 +138,14 @@ export class FoundationPerpEngine {
     take: number,
   ): Promise<EngineOrderbook | null> {
     return this.client.request({
-      method: "ob_query_depth",
+      method: 'ob_query_depth',
       params: [marketId, take],
     });
   }
 
   async updateConfig(): Promise<void> {
     this.config = await this.client.request({
-      method: "core_get_config",
+      method: 'core_get_config',
       params: [],
     });
   }
@@ -165,22 +165,22 @@ export class FoundationPerpEngine {
       },
       types: {
         Order: [
-          { name: "subaccount", type: "bytes32" },
-          { name: "market", type: "uint64" },
-          { name: "price", type: "int128" },
-          { name: "amount", type: "int128" },
-          { name: "nonce", type: "uint64" },
-          { name: "expiration", type: "uint64" },
-          { name: "triggerCondition", type: "uint128" },
+          { name: 'subaccount', type: 'bytes32' },
+          { name: 'market', type: 'uint64' },
+          { name: 'price', type: 'int128' },
+          { name: 'amount', type: 'int128' },
+          { name: 'nonce', type: 'uint64' },
+          { name: 'expiration', type: 'uint64' },
+          { name: 'triggerCondition', type: 'uint128' },
         ],
       },
-      primaryType: "Order",
+      primaryType: 'Order',
       message: {
         subaccount: params.account_id,
         market: BigInt(params.market_id),
         price: parseUnits(params.price, DECIMALS),
         amount: parseUnits(
-          params.side === "bid" ? params.amount : `-${params.amount}`,
+          params.side === 'bid' ? params.amount : `-${params.amount}`,
           DECIMALS,
         ),
         nonce: BigInt(params.nonce),
@@ -205,13 +205,13 @@ export class FoundationPerpEngine {
       },
       types: {
         Cancel: [
-          { name: "subaccount", type: "bytes32" },
-          { name: "market", type: "uint64" },
-          { name: "nonce", type: "uint64" },
-          { name: "orderId", type: "uint64" },
+          { name: 'subaccount', type: 'bytes32' },
+          { name: 'market', type: 'uint64' },
+          { name: 'nonce', type: 'uint64' },
+          { name: 'orderId', type: 'uint64' },
         ],
       },
-      primaryType: "Cancel",
+      primaryType: 'Cancel',
       message: {
         subaccount: params.account_id,
         market: BigInt(params.market_id),
@@ -236,12 +236,12 @@ export class FoundationPerpEngine {
       },
       types: {
         LinkSigner: [
-          { name: "sender", type: "bytes32" },
-          { name: "signer", type: "address" },
-          { name: "nonce", type: "uint64" },
+          { name: 'sender', type: 'bytes32' },
+          { name: 'signer', type: 'address' },
+          { name: 'nonce', type: 'uint64' },
         ],
       },
-      primaryType: "LinkSigner",
+      primaryType: 'LinkSigner',
       message: {
         sender: params.accountId,
         signer: params.signer,

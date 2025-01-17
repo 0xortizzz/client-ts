@@ -1,10 +1,10 @@
-import { Address, Hash, type LocalAccount } from "viem";
+import { Address, Hash, type LocalAccount } from 'viem';
 import {
   buildClientOpenOrder,
   buildEngineCancelOrder,
   buildEnginePlaceOrder,
-} from "./utils";
-import type { SmartAccount } from "viem/account-abstraction";
+} from './utils';
+import type { SmartAccount } from 'viem/account-abstraction';
 import {
   ClientCancelOrder,
   ClientMarketState,
@@ -24,8 +24,8 @@ import {
   ClientAccount,
   AddTradingKey,
   ClientPosition,
-} from "./types";
-import { FoundationPerpEngine } from "./engine";
+} from './types';
+import { FoundationPerpEngine } from './engine';
 
 export class FoundationPerpClient {
   private engine: FoundationPerpEngine;
