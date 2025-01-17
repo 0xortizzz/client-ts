@@ -7,12 +7,14 @@ import {
   EnginePlaceOrder,
 } from './types';
 import {
+  DECIMALS,
   SELF_TRADE_BEHAVIORS,
   SelfTradeBehavior,
   TIME_IN_FORCES,
 } from '@foundation-network/core/src';
 import { randomInt } from 'node:crypto';
 import { TimeInForce } from '@foundation-network/core';
+import {parseUnits} from 'viem';
 
 export function generateOrderNonce(num?: number): string {
   const now: number = new Date().getTime();
@@ -37,6 +39,25 @@ export function encodeExpiration(params: EnginePlaceOrder): bigint {
     BigInt(params.expires_at || 0)
   );
 }
+
+export function encodeTriggerCondition(params: EnginePlaceOrder): bigint {
+  if (!params.trigger_condition) return 0n;
+  const priceType: number = params.trigger_condition.mark_price ? 0 : 1;
+  const triggerPrice = !priceType
+    ? params.trigger_condition.mark_price
+    : params.trigger_condition.last_price;
+  const direction = triggerPrice?.above ? 1 : 0;
+  const stopPrice = direction ? triggerPrice?.above : triggerPrice?.below;
+  if (!stopPrice) {
+    return 0n;
+  }
+  return (
+    (BigInt(priceType) << 125n) |
+    (BigInt(direction) << 124n) |
+    parseUnits(stopPrice, DECIMALS)
+  );
+}
+
 
 export function buildEnginePlaceOrder(
   params: ClientPlaceOrder,
@@ -94,6 +115,6 @@ export function buildClientOpenOrder(order: EngineOpenOrder): ClientOpenOrder {
     quoteFee: order.quote_fee,
     side: order.side,
     tag: order.tag,
-    // triggerCondition: order.trigger_condition,
+    triggerCondition: order.trigger_condition,
   };
 }

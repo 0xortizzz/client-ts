@@ -58,13 +58,20 @@ test('test', async () => {
     const buyPrice = (indexPrice / tickSize) * tickSize;
 
     const orders: ClientPlaceOrder[] = [
+      // place order with SL
       {
         accountId,
         marketId: marketConfig.id,
         side: 'ask',
         price: formatUnits(sellPrice, DECIMALS),
         amount,
+        triggerCondition: {
+          last_price: {
+            below: formatUnits(sellPrice - sellPrice / 10n, DECIMALS),
+          },
+        },
       },
+      // place order without TP/SL
       {
         accountId,
         marketId: marketConfig.id,

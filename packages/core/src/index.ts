@@ -84,3 +84,14 @@ export type OrderStatus =
   | 'conditional_canceled';
 
 export const DECIMALS: number = 8;
+
+export type TriggerCondition = {
+  mark_price?: {
+    above?: string;
+    below?: string;
+  };
+  last_price?: {
+    above?: string;
+    below?: string;
+  };
+};
