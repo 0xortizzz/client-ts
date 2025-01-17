@@ -58,7 +58,7 @@ test('test', async () => {
     const buyPrice = (indexPrice / tickSize) * tickSize;
 
     const orders: ClientPlaceOrder[] = [
-      // place order with SL
+      // place order with trigger condition
       {
         accountId,
         marketId: marketConfig.id,
@@ -71,7 +71,7 @@ test('test', async () => {
           },
         },
       },
-      // place order without TP/SL
+      // place order without trigger condition
       {
         accountId,
         marketId: marketConfig.id,
