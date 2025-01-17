@@ -1,6 +1,6 @@
-import { test } from "vitest";
-import { FoundationPerpClient } from "./index";
-import { PrivateKeyAccount, privateKeyToAccount } from "viem/accounts";
+import { test } from 'vitest';
+import { FoundationPerpClient } from './index';
+import { PrivateKeyAccount, privateKeyToAccount } from 'viem/accounts';
 import {
   ClientAccount,
   ClientMarketConfig,
@@ -9,15 +9,15 @@ import {
   ClientOpenOrder,
   ClientOrderbook,
   ClientPlaceOrder,
-} from "./types";
-import { TESTNET_RPC_URL } from "./engine";
-import { buildAccountId, ProductType } from "@foundation-network/core";
-import { formatUnits, Hash, parseUnits } from "viem";
-import { DECIMALS } from "@foundation-network/core/src";
+} from './types';
+import { TESTNET_RPC_URL } from './engine';
+import { buildAccountId, ProductType } from '@foundation-network/core';
+import { formatUnits, Hash, parseUnits } from 'viem';
+import { DECIMALS } from '@foundation-network/core/src';
 
-test("test", async () => {
+test('test', async () => {
   const signer: PrivateKeyAccount = privateKeyToAccount(
-    "0x4bbbf85ce3377467afe5d46f804f221813b2bb87f24d81f60f1fcdbf7cbf4356",
+    '0x4bbbf85ce3377467afe5d46f804f221813b2bb87f24d81f60f1fcdbf7cbf4356',
   );
   const accountId: Hash = buildAccountId(
     signer.address,
@@ -61,14 +61,14 @@ test("test", async () => {
       {
         accountId,
         marketId: marketConfig.id,
-        side: "ask",
+        side: 'ask',
         price: formatUnits(sellPrice, DECIMALS),
         amount,
       },
       {
         accountId,
         marketId: marketConfig.id,
-        side: "bid",
+        side: 'bid',
         price: formatUnits(buyPrice, DECIMALS),
         amount,
       },

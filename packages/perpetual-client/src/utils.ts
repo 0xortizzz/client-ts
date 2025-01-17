@@ -5,14 +5,14 @@ import {
   EngineCancelOrder,
   EngineOpenOrder,
   EnginePlaceOrder,
-} from "./types";
+} from './types';
 import {
   SELF_TRADE_BEHAVIORS,
   SelfTradeBehavior,
   TIME_IN_FORCES,
-} from "@foundation-network/core/src";
-import { randomInt } from "node:crypto";
-import { TimeInForce } from "@foundation-network/core";
+} from '@foundation-network/core/src';
+import { randomInt } from 'node:crypto';
+import { TimeInForce } from '@foundation-network/core';
 
 export function generateOrderNonce(num?: number): string {
   const now: number = new Date().getTime();
@@ -44,9 +44,9 @@ export function buildEnginePlaceOrder(
   const nonce: string = params.nonce || generateOrderNonce();
   const isMarketOrder: boolean = params.isMarketOrder || false;
   const reduceOnly: boolean = params.reduceOnly || false;
-  const timeInForce: TimeInForce = params.timeInForce || "default";
+  const timeInForce: TimeInForce = params.timeInForce || 'default';
   const selfTradeBehavior: SelfTradeBehavior =
-    params.selfTradeBehavior || "cancel_provide";
+    params.selfTradeBehavior || 'cancel_provide';
 
   return {
     account_id: params.accountId,
