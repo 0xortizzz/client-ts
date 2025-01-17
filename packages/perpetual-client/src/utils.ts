@@ -54,7 +54,7 @@ export function buildEnginePlaceOrder(
     side: params.side,
     price: params.price,
     amount: params.amount,
-    trigger_condition: params.triggerCondition,
+    // trigger_condition: params.triggerCondition,
     time_in_force: timeInForce,
     reduce_only: reduceOnly,
     is_market_order: isMarketOrder,
@@ -94,6 +94,6 @@ export function buildClientOpenOrder(order: EngineOpenOrder): ClientOpenOrder {
     quoteFee: order.quote_fee,
     side: order.side,
     tag: order.tag,
-    triggerCondition: order.trigger_condition,
+    // triggerCondition: order.trigger_condition,
   };
 }
