@@ -11,21 +11,24 @@ import {
   ClientMarketConfig,
   ClientOpenOrder,
   ClientPlaceOrder,
+
+  ClientOrderbook,
+  ClientMarketPrice,
+  ClientAccount,
+  AddTradingKey,
+  ClientPosition,
+} from './types';
+import {
+  FoundationPerpEngine,
   EngineCancelOrder,
   EngineMarketState,
   EngineMarketConfig,
   EngineOpenOrder,
   EnginePlaceOrder,
   EngineOrderbook,
-  ClientOrderbook,
-  ClientMarketPrice,
   EngineMarketPrice,
   EngineAccount,
-  ClientAccount,
-  AddTradingKey,
-  ClientPosition,
-} from './types';
-import { FoundationPerpEngine } from './engine';
+} from './engine';
 
 export class FoundationPerpClient {
   private engine: FoundationPerpEngine;

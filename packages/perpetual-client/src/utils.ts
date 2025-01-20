@@ -2,10 +2,12 @@ import {
   ClientCancelOrder,
   ClientOpenOrder,
   ClientPlaceOrder,
+} from './types';
+import {
   EngineCancelOrder,
   EngineOpenOrder,
   EnginePlaceOrder,
-} from './types';
+} from './engine';
 import {
   DECIMALS,
   SELF_TRADE_BEHAVIORS,
