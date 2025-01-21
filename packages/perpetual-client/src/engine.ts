@@ -7,7 +7,7 @@ import {
   Config,
   AddTradingKey, OrderExpiration, OrderSource, FeeTier, OrderTag, OrderbookItem,
 } from './types';
-import { type Address, Hash, type LocalAccount, parseUnits } from 'viem';
+import {type Address, Hash, type LocalAccount, parseUnits} from 'viem';
 import type { SmartAccount } from 'viem/account-abstraction';
 import {encodeExpiration, encodeTriggerCondition} from './utils';
 import {
@@ -21,9 +21,9 @@ import {
 
 export const EIP712_DOMAIN = {
   name: 'FOUNDATION',
-  chainId: 1,
   version: '0.1.0',
 } as const;
+
 export const TESTNET_RPC_URL =
   'https://testnet-rpc.foundation.network/perpetual';
 
@@ -144,7 +144,7 @@ export class FoundationPerpEngine {
 
   async updateConfig(): Promise<void> {
     this.config = await this.client.request({
-      method: 'core_get_config',
+      method: 'core_get_trading_config',
       params: [],
     });
   }
@@ -152,15 +152,14 @@ export class FoundationPerpEngine {
   async signPlaceOrder(
     signer: LocalAccount | SmartAccount,
     params: EnginePlaceOrder,
-    verifyingAddr?: Address,
   ): Promise<Hash> {
-    const verifyingContract: Address =
-      verifyingAddr || (await this.getConfig()).addresses.offchain_book;
+    const config = await this.getConfig();
 
     return signer.signTypedData({
       domain: {
         ...EIP712_DOMAIN,
-        verifyingContract,
+        chainId: config.chain_id,
+        verifyingContract: config.offchain_book,
       },
       types: {
         Order: [
@@ -192,15 +191,14 @@ export class FoundationPerpEngine {
   async signCancelOrder(
     signer: LocalAccount | SmartAccount,
     params: EngineCancelOrder,
-    verifyingAddr?: Address,
   ): Promise<Hash> {
-    const verifyingContract: Address =
-      verifyingAddr || (await this.getConfig()).addresses.offchain_book;
+    const config = await this.getConfig();
 
     return signer.signTypedData({
       domain: {
         ...EIP712_DOMAIN,
-        verifyingContract,
+        chainId: config.chain_id,
+        verifyingContract: config.offchain_book,
       },
       types: {
         Cancel: [
@@ -223,15 +221,13 @@ export class FoundationPerpEngine {
   async signAddTradingKey(
     signer: LocalAccount | SmartAccount,
     params: AddTradingKey,
-    verifyingAddr?: Address,
   ): Promise<Hash> {
-    const verifyingContract: Address =
-      verifyingAddr || (await this.getConfig()).addresses.endpoint;
-
+    const config = await this.getConfig()
     return signer.signTypedData({
       domain: {
         ...EIP712_DOMAIN,
-        verifyingContract,
+        chainId: config.chain_id,
+        verifyingContract: config.endpoint,
       },
       types: {
         LinkSigner: [

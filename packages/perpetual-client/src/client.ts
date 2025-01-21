@@ -44,7 +44,6 @@ export class FoundationPerpClient {
   async addTradingKey(
     signer: LocalAccount | SmartAccount,
     accountId: Hash,
-    verifyingAddr?: Address,
   ): Promise<void> {
     const nonce: number = await this.getUserNonce(signer.address);
 
@@ -57,7 +56,6 @@ export class FoundationPerpClient {
     const signature: Hash = await this.engine.signAddTradingKey(
       signer,
       params,
-      verifyingAddr,
     );
 
     await this.engine.addTradingKey(params, signature);
@@ -76,7 +74,6 @@ export class FoundationPerpClient {
     const signature: Hash = await this.engine.signPlaceOrder(
       signer,
       payload,
-      params.verifyingAddr,
     );
 
     return this.engine.placeOrder(payload, signature);
@@ -91,7 +88,6 @@ export class FoundationPerpClient {
     const signature: Hash = await this.engine.signCancelOrder(
       signer,
       payload,
-      params.verifyingAddr,
     );
 
     return this.engine.cancelOrder(payload, signature);
