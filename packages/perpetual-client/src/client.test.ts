@@ -51,7 +51,7 @@ test('test', async () => {
     const indexPrice = parseUnits(marketPrice.indexPrice, DECIMALS);
     const tickSize = parseUnits(marketConfig.tickSize, DECIMALS);
     const amount = formatUnits(
-      parseUnits(marketConfig.stepSize, DECIMALS) * 10n,
+      parseUnits(marketConfig.stepSize, DECIMALS) * 100n,
       DECIMALS,
     );
     const sellPrice = (indexPrice / tickSize) * tickSize + tickSize;

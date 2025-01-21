@@ -2,20 +2,15 @@ import { Address, Hash } from 'viem';
 import { Side, TimeInForce } from '@foundation-network/core';
 import {SelfTradeBehavior, TriggerCondition} from '@foundation-network/core/src';
 
-export type AddressConfig = {
+export type Config = {
+  chain_id: number;
   endpoint: Address;
-  cr_manager: Address;
   offchain_book: Address;
 };
 
 export type FeeTier = {
   maker_fee: string;
   taker_fee: string;
-};
-
-export type Config = {
-  addresses: AddressConfig;
-  system_fee_tiers: FeeTier[];
 };
 
 export type ClientPlaceOrder = {
