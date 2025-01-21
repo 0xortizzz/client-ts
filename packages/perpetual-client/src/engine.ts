@@ -19,6 +19,11 @@ import {
   TriggerCondition
 } from '@foundation-network/core/src';
 
+export const EIP712_DOMAIN = {
+  name: 'FOUNDATION',
+  version: '0.1.0',
+} as const;
+
 export const TESTNET_RPC_URL =
   'https://testnet-rpc.foundation.network/perpetual';
 
@@ -152,9 +157,8 @@ export class FoundationPerpEngine {
 
     return signer.signTypedData({
       domain: {
-        name: 'FOUNDATION',
+        ...EIP712_DOMAIN,
         chainId: config.chain_id,
-        version: '0.1.0',
         verifyingContract: config.offchain_book,
       },
       types: {
@@ -192,9 +196,8 @@ export class FoundationPerpEngine {
 
     return signer.signTypedData({
       domain: {
-        name: 'FOUNDATION',
+        ...EIP712_DOMAIN,
         chainId: config.chain_id,
-        version: '0.1.0',
         verifyingContract: config.offchain_book,
       },
       types: {
@@ -222,9 +225,8 @@ export class FoundationPerpEngine {
     const config = await this.getConfig()
     return signer.signTypedData({
       domain: {
-        name: 'FOUNDATION',
+        ...EIP712_DOMAIN,
         chainId: config.chain_id,
-        version: '0.1.0',
         verifyingContract: config.endpoint,
       },
       types: {
